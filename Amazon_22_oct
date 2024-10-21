@@ -77,3 +77,92 @@ public class TestSample {
         }
     }
 }
+
+
+
+
+
+
+Spicejet
+
+
+
+package runner;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.WebDriverListener;
+import org.testng.annotations.Test;
+import utils.EventHandler;
+
+public class TestSample {
+
+    public static WebDriver driver;
+
+    @Test
+    public void testMain() {
+        try {
+            driver = new RemoteWebDriver(new URL("http://localhost:4444"), new ChromeOptions());
+            
+            // Maximize the browser window
+            driver.manage().window().maximize();
+                       
+            // Add the implicit wait
+            driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
+                     
+            // Add the page load timeout
+            driver.manage().timeouts().pageLoadTimeout(java.time.Duration.ofSeconds(10));
+                      
+            // Initialize the event listener
+            WebDriverListener listener = new EventHandler();
+            driver = new EventFiringDecorator<>(listener).decorate(driver);
+
+            // Step 1: Open the browser and navigate to the website
+            driver.get("https://www.spicejet.com/");
+            
+            // Step 2: Click on the round trip
+            driver.findElement(By.id("ctl00_mainContent_rbtnl_Trip_1")).click();
+            
+            // Step 3: Click on the one way
+            driver.findElement(By.id("ctl00_mainContent_rbtnl_Trip_0")).click();
+            
+            // Step 4: Click on the 'From' field and enter the value 'Mumbai'
+            driver.findElement(By.id("ctl00_mainContent_ddl_originStation1_CTXT")).click();
+            driver.findElement(By.xpath("//a[text()='Mumbai (BOM)']")).click();
+            
+            // Step 5: Click on the 'To' field and enter the value 'Delhi'
+            driver.findElement(By.id("ctl00_mainContent_ddl_destinationStation1_CTXT")).click();
+            driver.findElement(By.xpath("//a[text()='Delhi (DEL)']")).click();
+            
+            // Step 6: Click on the departure date and set it to 28th Nov
+            driver.findElement(By.id("ctl00_mainContent_view_date1")).click();
+            driver.findElement(By.xpath("//a[text()='28']")).click();
+            
+            // Step 7: Click on the passengers and add one more adult
+            driver.findElement(By.id("divpaxinfo")).click();
+            driver.findElement(By.id("hrefIncAdt")).click();
+            driver.findElement(By.id("btnclosepaxoption")).click();
+            
+            // Step 8: Click on Search Flight
+            driver.findElement(By.id("ctl00_mainContent_btn_FindFlights")).click();
+            
+            // Step 9: After getting the result, go to the 3rd flight and print the price of SpiceFix
+            Thread.sleep(5000); // Wait for the results to load
+            String spiceFixPrice = driver.findElements(By.className("spicefix-price")).get(2).getText();
+            System.out.println("Price of SpiceFix for the 3rd flight: " + spiceFixPrice);
+        
+        } catch (MalformedURLException | InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            if (driver != null) {
+                driver.quit();
+            }
+        }
+    }
+}
