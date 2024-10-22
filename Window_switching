@@ -1,4 +1,12 @@
- driver.get("https://developer.mozila.org/en-US/docs/web/HTML/Element/option");
+driver.get("https://developer.mozila.org/en-US/docs/web/HTML/Element/option");
+            WebElement xx=driver.findElement(By.cssSelector("button.search-btn"));
+             WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(3));
+             wait.until(ExpectedCondition.elementToBeClickable(xx));
+
+
+
+
+driver.get("https://developer.mozila.org/en-US/docs/web/HTML/Element/option");
             //driver.findElement(By.cssSelector("button.search-btn")).click();
             
             //Alert alrt=driver.switchTo().alert();
