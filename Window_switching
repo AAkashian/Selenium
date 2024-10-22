@@ -1,3 +1,26 @@
+ driver.get("https://developer.mozila.org/en-US/docs/web/HTML/Element/option");
+            //driver.findElement(By.cssSelector("button.search-btn")).click();
+            
+            //Alert alrt=driver.switchTo().alert();
+            //alrt.accept();
+
+            // driver.switchTo().frame(0);
+            // driver.switchTo().frame("output-iframe");
+            
+
+            WebElement selectElement=driver.findElement(By.id("pet-select"));
+            Select slct=new Select(selectElement);
+            //slct.selectByValue("Dog");
+             slct.selectByVisibleText("Dog");
+
+            // driver.switchTo().parentFrame();
+             //driver.switchTo().parentFrame();
+             driver.switchTo().defaultContent();
+ 
+
+
+
+
 package runner;
 
 import java.net.MalformedURLException;
