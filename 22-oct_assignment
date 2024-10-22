@@ -1,0 +1,13 @@
+ driver.get("https://demo.automationtesting.in/Alerts.html");
+            driver.findElement(By.xpath("//button[@class='btn btn-danger']")).click();
+
+
+            Alert alrt=driver.switchTo().alert();
+            alrt.accept();
+          
+            driver.findElement(By.linkText("Alert with OK & Cancel")).click();
+                  
+            driver.findElement(By.xpath("//button[@class='btn btn-primary']")).click();
+
+            Alert alrt1=driver.switchTo().alert();
+            alrt1.dismiss();
