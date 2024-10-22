@@ -11,3 +11,47 @@
 
             Alert alrt1=driver.switchTo().alert();
             alrt1.dismiss();
+
+
+
+
+driver.get("https://www.angi.com/");
+            WebElement res = driver.findElement(By.id("header--dynamic--articles-link"));
+            Actions actions = new Actions(driver);
+            actions.moveToElement(res).perform();
+ 
+            driver.findElement(By.id("header--dynamic--articles-link-OutdoorLiving")).click();
+ 
+            WebElement showBTN = driver.findElement(By.name("Show More article"));
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("argument[0].scrollIntoView", showBTN);
+            showBTN.click();
+
+
+
+
+// Start your script from here
+            driver.get("https://www.angi.com/");
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("(//img[@alt='Twitter'])[1]")).click();
+            Thread.sleep(1000);
+            driver.navigate().back();
+            driver.navigate().back();
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("(//img[@alt='Facebook'])[1]")).click();
+            Thread.sleep(1000);
+            driver.navigate().back();
+            driver.navigate().back();
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("(//img[@alt='Pinterest'])[1]")).click();
+            Thread.sleep(1000);
+            driver.navigate().back();
+            driver.navigate().back();
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("(//img[@alt='YouTube'])[1]")).click();
+            Thread.sleep(3000);
+            driver.navigate().back();
+            driver.findElement(By.xpath("(//img[@alt='Instagram'])[1]")).click();
+            Thread.sleep(1000);
+            driver.navigate().back();
+ 
