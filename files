@@ -1,0 +1,101 @@
+package runner;
+
+import java.net.MalformedURLException;
+import utils.Base;
+
+import org.apache.commons.math3.analysis.function.Signum;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import pages.SignupPage;
+
+import org.testng.annotations.AfterMethod;
+import utils.EventHandler;
+
+public class TestSpice extends Base{
+    // public static WebDriver driver;
+    
+    @Test
+    public void validateSignup()
+    {
+      SignupPage signup=new SignupPage(driver);
+      signup.validateSignup();
+
+    }
+   @BeforeMethod
+    public void startBrowser() throws  MalformedURLException{
+            openBrowser();
+    }
+
+    @AfterMethod
+    public void closeBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
+
+
+package utils;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.WebDriverListener;
+
+public class Base {
+    public WebDriver driver;
+    public void openBrowser() throws MalformedURLException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-notifications");
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/"), options);
+        
+        WebDriverListener listener = new EventHandler();
+        driver = new EventFiringDecorator<>(listener).decorate(driver);
+
+        driver.manage().window().maximize();
+        driver.get("https://www.spicejet.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+    } 
+}
+
+
+
+
+package pages;
+import java.util.Set;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;;
+
+public class SignupPage {
+    public WebDriver driver;
+    
+        public SignupPage(WebDriver driver) {
+            this.driver=driver;
+        }
+
+        public void validateSignup(){
+           String firstHandel=driver.getWindowHandle();
+            driver.findElement(By.xpath("//div[contains(text(),'Signup')]")).click();
+
+            Set<String> handels=driver.getWindowHandles();
+            for(String handel:handels){
+                if(handel != firstHandel){
+                    driver.switchTo().window(handel);
+                }
+            }
+         String exceptedTitle="SpiceClub";
+         Assert.assertTrue(driver.getTitle().contains(exceptedTitle));
+
+        }
+    
+}
