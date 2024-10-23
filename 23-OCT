@@ -1,3 +1,75 @@
+package runner;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.Set;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.WebDriverListener;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.testng.annotations.AfterMethod;
+import utils.EventHandler;
+//import utils.base;
+
+public class TestSpice{
+    public static WebDriver driver;
+
+    @Test
+    public void test1(){
+        String Parent=driver.getWindowHandle();
+        driver.findElement(By.xpath("//div[contains(text(),'Signup')]")).click();
+      
+        Set<String> handels=driver.getWindowHandles();
+       for(String child: handels){
+        if( !child.equals(Parent)){
+          driver.switchTo().window(child);
+        }
+       }
+    }
+    @Test
+    public void test2(){
+        driver.findElement(By.xpath("//div[contains(text(),'SpiceHolidays')]")).click();
+        String parent=driver.getWindowHandle();
+        Set<String> all=driver.getWindowHandles();
+         for (String child :all) {
+            if(!parent.equals(child))
+             driver.switchTo().window(child);
+        }
+        driver.findElement(By.xpath("//input[@id='txtDesCity']")).click();
+       driver.findElement(By.xpath("//input[@id='txtDesCity']")).sendKeys("Goa");
+       //Thread.sleep(5000);
+       driver.findElement(By.xpath("//input[@id='txtDesCity']")).click();
+    }
+            @BeforeMethod
+            public void openBrowser() throws MalformedURLException {
+            ChromeOptions options = new ChromeOptions();
+            driver = new RemoteWebDriver(new URL("http://localhost:4444/"), options);
+            
+            WebDriverListener listener = new EventHandler();
+            driver = new EventFiringDecorator<>(listener).decorate(driver);
+
+             driver.manage().window().maximize();
+             driver.get("https://www.spicejet.com/");
+             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+        }
+    
+    @AfterMethod
+    public void closeBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
+
+
 BASE
 public class Base {
     public WebDriver driver;
