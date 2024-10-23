@@ -1,0 +1,113 @@
+BASE
+public class Base {
+    public WebDriver driver;
+    public void openBrowser() throws MalformedURLException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-notifications");
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/"), options);
+        
+        WebDriverListener listener = new EventHandler();
+        driver = new EventFiringDecorator<>(listener).decorate(driver);
+
+        driver.manage().window().maximize();
+        driver.get("https://www.spicejet.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+    } 
+}
+
+TestSpice
+public class TestSpice extends Base{
+    @Test(priority = 1)
+    public void validateSignup()
+    {
+      SignupPage signup=new SignupPage(driver);
+      signup.validateSignup();
+
+    }
+     @Test(priority = 2)
+    public void validateHolidays ()throws InterruptedException, IOException
+    {
+        SpiceHolidays spcHld =new SpiceHolidays(driver);
+         spcHld.validateHolidayss();
+
+    }
+   @BeforeMethod
+    public void startBrowser() throws  MalformedURLException{
+            openBrowser();
+    }
+    @AfterMethod
+    public void closeBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
+
+Page-1___Sign_up
+public class SignupPage {
+    public WebDriver driver;
+    
+        public SignupPage(WebDriver driver) {
+            this.driver=driver;
+        }
+
+        public void validateSignup(){
+           String firstHandel=driver.getWindowHandle();
+            driver.findElement(By.xpath("//div[contains(text(),'Signup')]")).click();
+
+            Set<String> handels=driver.getWindowHandles();
+            for(String handel:handels){
+                if(handel != firstHandel){
+                    driver.switchTo().window(handel);
+                }
+            }
+         String exceptedTitle="SpiceClub";
+         Assert.assertTrue(driver.getTitle().contains(exceptedTitle));
+
+        }
+}
+
+
+
+page-2__Spice_Holidays
+public class SpiceHolidays {
+       public WebDriver driver;
+        public SpiceHolidays(WebDriver driver) {
+            this.driver=driver;
+        }
+        public void  validateHolidayss()throws InterruptedException,IOException{
+           String firstHandel=driver.getWindowHandle();
+           //click SpiceHolidays
+            driver.findElement(By.xpath("//div[contains(text(),'SpiceHolidays')]")).click();
+            Thread.sleep(3000);
+            Set<String> handels=driver.getWindowHandles();
+            for(String handel:handels){
+                if(handel != firstHandel){
+                    driver.switchTo().window(handel);
+                }
+            }
+            Thread.sleep(3000);
+            driver.findElement(By.id("txtDesCity")).sendKeys("Goa");
+            driver.findElement(By.xpath("//p[text()='Goa']")).click();
+            Screenshot.createScreenshot(driver,"Goa Beach");
+        } 
+}
+
+
+SCREENSHOT
+
+public class Screenshot {
+    public static void createScreenshot(WebDriver driver,String str) {
+
+        String directoryPath=System.getProperty("user.dir")+"/screenshots/";
+        File srcFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        String destFileName=directoryPath+"ss1.png";
+        File dest=new File(destFileName);
+        try {
+            FileUtils.copyFile(srcFile,dest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
