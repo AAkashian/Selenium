@@ -1,3 +1,11 @@
+SCREENSHOT
+TakesScreenshot ts= (TakesScreenshot)driver;
+File src =ts.getScreenshotAs(OutputType.FILE);
+File dest = new File(System.getProperty("user.dir")+"/screenshot/password.png");
+FileUtils.copyFile(src, dest);
+
+
+
 package runner;
 
 import java.net.MalformedURLException;
