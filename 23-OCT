@@ -1,3 +1,20 @@
+EXCELL
+public class ExcelReader {
+    public String readExcelData() throws IOException{
+        String path=System.getProperty("user.dir")+"/testdata/data.xlsx";
+        FileInputStream fim=new FileInputStream(path);
+        XSSFWorkbook workbook=new XSSFWorkbook(fim);
+        XSSFSheet sheet=workbook.getSheet("amazon");
+        XSSFRow row=sheet.getRow(0);
+        //1st on-to locate only//2-to get Value
+        XSSFCell cell=row.getCell(0);
+        String data= row.getCell(1).getStringCellValue();
+        return data;
+    }
+}
+
+
+
 PROPERTIES
 
 Properties pro=new Properties();
