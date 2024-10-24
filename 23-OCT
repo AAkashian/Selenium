@@ -13,8 +13,7 @@ public class ExcelReader {
         XSSFSheet sheet=workbook.getSheet("amazon");
         XSSFRow row=sheet.getRow(0);
         //1st on-to locate only//2-to get Value
-        XSSFCell cell=row.getCell(0);
-        String data= row.getCell(1).getStringCellValue();
+        String data= row.getCell(0).getStringCellValue();
         return data;
     }
 }
