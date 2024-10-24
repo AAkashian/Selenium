@@ -1,3 +1,19 @@
+PROPERTIES
+
+Properties pro=new Properties();
+      String path=System.getProperty("user.dir")+"/config/config.properties"; 
+      FileInputStream input= new FileInputStream(path);
+       pro.load(input);
+      String url=pro.getProperty("url");
+      String author=pro.getProperty("author");
+      driver.get(url);
+      System.out.println(author);
+
+
+
+
+
+
 SCREENSHOT
 TakesScreenshot ts= (TakesScreenshot)driver;
 File src =ts.getScreenshotAs(OutputType.FILE);
