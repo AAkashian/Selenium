@@ -1,8 +1,8 @@
 #set the root logger level and its appenders
 rootLogger.level=debug
-rootLogger.aapenderRefs=console,FILE
-rootLogger.aapenderRef.console.ref=Console
-rootLogger.aapenderRef.file.ref=File
+rootLogger.appenderRefs=console,FILE
+rootLogger.appenderRef.console.ref=Console
+rootLogger.appenderRef.file.ref=File
 
 #Console Appender configuration
 appender.console.type=Console
