@@ -1,0 +1,92 @@
+package runner;
+
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.WebDriverListener;
+import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import utils.EventHandler;
+import java.time.*;
+
+public class TestPage {
+    WebDriver driver;
+    ExtentReports reports;
+    ExtentSparkReporter reporter;
+    ExtentTest test;
+    @BeforeTest
+    public void setupReports() {
+        //Give File path
+        String path = System.getProperty("user.dir") + "/reports/report.html";
+
+        // cretae reporter object
+        reporter = new ExtentSparkReporter(path);
+
+        // create reports object
+        reports = new ExtentReports();
+
+        //attach myreports to reporter Object
+        reports.attachReporter(reporter);
+    }
+    @BeforeMethod
+    public void setup() throws MalformedURLException   {
+
+        driver = new RemoteWebDriver(new URL("http://localhost:4444"), new ChromeOptions());
+        driver.manage().window().maximize();
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(15));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+        WebDriverListener listener = new EventHandler();
+        driver = new EventFiringDecorator<>(listener).decorate(driver);
+        driver.get("https://opensource-demo.orangehrmlive.com/");
+
+    }
+    // start your script here
+    @Test
+    public void testGoogle1() throws InterruptedException {
+        test = reports.createTest("test1", "This is first test...");
+        driver.findElement(By.name("username")).sendKeys("Admin");
+        driver.findElement(By.name("password")).sendKeys("admin123");
+        driver.findElement(By.xpath("//button")).click();
+        String actual = driver.findElement(By.xpath("//span[@class='oxd-topbar-header-breadcrumb']/h6")).getText();
+
+        // Assert
+        Assert.assertTrue(actual.contains("Dash"));
+    }
+    @Test
+    public void testGoogle2() throws InterruptedException {
+        test = reports.createTest("test2", "This is second test...");
+        driver.findElement(By.name("username")).sendKeys("Adminn");
+        driver.findElement(By.name("password")).sendKeys("123");
+        driver.findElement(By.xpath("//button")).click();
+        // Assert
+    }
+    @AfterMethod
+    public void teardown(ITestResult result) {
+        if (result.getStatus() == ITestResult.SUCCESS) {
+            // test.pass("Test case Passed");
+            test.log(Status.PASS, result.getName());
+        }
+        if (result.getStatus() == ITestResult.FAILURE) {
+            test.log(Status.FAIL, result.getName() + result.getThrowable());
+        }
+        driver.quit();
+    }
+    @AfterTest
+    public void generateReport(){
+        reports.flush();
+    }
+
+}
