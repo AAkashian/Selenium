@@ -1,0 +1,107 @@
+package pages;
+
+import java.io.IOException;
+
+import org.openqa.selenium.WebDriver;
+
+
+import uistore.HomePageUi;
+import utils.ExcelReader;
+import utils.Screenshot;
+import utils.WebDriverHelper;
+
+public class ValidateSearch {
+     WebDriver driver;
+     WebDriverHelper helper;
+
+     public ValidateSearch(WebDriver driver){
+          this.driver= driver;
+          helper=new WebDriverHelper(driver);
+     }
+
+     public void SearchIn() throws IOException, InterruptedException{
+        helper.hoverOverElement(HomePageUi.searchIcon);
+        String path=System.getProperty("user.dir")+"/testdata/testdata.xlsx";
+        String data=ExcelReader.readdata(path, "sheet1", 0, 0) ;
+        helper.sendKeys(HomePageUi.searchBox,data);
+        helper.enterAction(HomePageUi.searchBox);
+        Thread.sleep(3000);
+        helper.enterAction(HomePageUi.addToCart);
+        helper.switchToNewWindow();
+        Screenshot.captureScreenShot("ss");
+        
+     }
+}
+
+
+
+package runner;
+
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+
+import pages.ValidateSearch;
+import utils.Base;
+import utils.LoggerHandler;
+import utils.Reporter;
+
+public class TestRunner extends Base{
+   ExtentTest test;
+   ExtentReports reports;
+   
+
+   @BeforeMethod
+   public void start(){
+     openBrowser();
+     reports = Reporter.generateExtentReport("report");
+   }
+   @Test
+   public void Search() throws IOException, InterruptedException{
+    test=reports.createTest("case1");
+    try {
+      LoggerHandler.info("hello");
+      ValidateSearch obj1=new ValidateSearch(driver);
+      obj1.SearchIn();
+    } catch (Exception e) {
+      LoggerHandler.error("message");
+    }
+    
+    
+   }
+   @AfterMethod
+   public void end(){
+    driver.quit();
+   }
+   @AfterTest
+   public void flushReport(){
+     reports.flush();
+   }
+   
+    
+}
+
+
+
+package uistore;
+
+import org.openqa.selenium.By;
+
+public class HomePageUi {
+    public static By searchIcon=By.xpath("//i[@class='fa fa-search']/parent::a");
+    public static By searchBox=By.xpath("//input[@id='searchFieldVal']");
+    public static By addToCart=By.xpath( "(//a[contains(text(),'VIEW DETAIL')])[1]");
+    public static By  wind=By.xpath("(//a[contains(text(),'");
+}
+
+
+
+
+
