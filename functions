@@ -1,3 +1,48 @@
  JavascriptExecutor js=(JavascriptExecutor) driver;
     WebElement element=driver.findElement(By.xpath("//img[@alt='Download BikeDekho’s Free iOS App']"));
     js.executeScript("arguments[0].scrollIntoView(true);", element);
+
+
+@Test 
+	public void TestFlipkartLoading() throws IOException{
+		String data=ExcelReader.readExcelData();
+		driver.findElement(By.name("q")).sendKeys(data,Keys.ENTER);
+	}
+
+EXCELL
+public class ExcelReader {
+    public String readExcelData() throws IOException{
+        String path=System.getProperty("user.dir")+"/testdata/data.xlsx";
+        FileInputStream fim=new FileInputStream(path);
+        XSSFWorkbook workbook=new XSSFWorkbook(fim);
+        XSSFSheet sheet=workbook.getSheet("amazon");
+        XSSFRow row=sheet.getRow(0);
+        //1st on-to locate only//2-to get Value
+        String data= row.getCell(0).getStringCellValue();
+        return data;
+    }
+}
+
+
+
+PROPERTIES
+
+Properties pro=new Properties();
+      String path=System.getProperty("user.dir")+"/config/config.properties"; 
+      FileInputStream input= new FileInputStream(path);
+       pro.load(input);
+      String url=pro.getProperty("url");
+      String author=pro.getProperty("author");
+      driver.get(url);
+      System.out.println(author);
+
+
+
+
+
+
+SCREENSHOT
+TakesScreenshot ts= (TakesScreenshot)driver;
+File src =ts.getScreenshotAs(OutputType.FILE);
+File dest = new File(System.getProperty("user.dir")+"/screenshot/password.png");
+FileUtils.copyFile(src, dest);
