@@ -1,4 +1,13 @@
- JavascriptExecutor js=(JavascriptExecutor) driver;
+element
+Actions act=new Actions(driver);
+act.moveToElement(act).build().perform();
+
+Alert alrt=new Alert(driver);
+alrt.switchTo().accept();
+
+
+
+JavascriptExecutor js=(JavascriptExecutor) driver;
     WebElement element=driver.findElement(By.xpath("//img[@alt='Download BikeDekho’s Free iOS App']"));
     js.executeScript("arguments[0].scrollIntoView(true);", element);
 
