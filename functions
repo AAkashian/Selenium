@@ -39,8 +39,6 @@ Properties pro=new Properties();
 
 
 
-
-
 SCREENSHOT
 TakesScreenshot ts= (TakesScreenshot)driver;
 File src =ts.getScreenshotAs(OutputType.FILE);
