@@ -1,0 +1,12 @@
+//Web driverWait
+
+wait=WebDriverWait(driver,Duration.ofSeconds(20));
+
+method(){
+wait.until(ExcepteddConditions.(WebElement));
+}
+
+//Untill visible
+method(){
+wait.until(ExcepteddConditions.visiblityOfElementLocated(WebElement));
+}
