@@ -28,10 +28,11 @@ public class TestRunner extends Base{
     test=reports.createTest("case 1");
       try{
         LoggerHandler.info("case1 Passed");
-        test.log(StatusPass,"Message");
+        test.log(Status.PASS,"Message");
      Case1 obj1=new Case1(driver);
      obj1.Search();
     }catch(Exception e){
+     test.log(Status.FAIL,"Message");
         e.printStackTrace();
     }
    }
