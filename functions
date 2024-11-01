@@ -5,7 +5,16 @@ act.moveToElement(act).build().perform();
 Alert alrt=new Alert(driver);
 alrt.switchTo().accept();
 
+Select obj=new Select();
+obj.selectByVisibleText("Monkey");
 
+Actions act=new Actions(driver);
+act.dragAndDrop(source, target).build().perform();
+
+Actions act=new Actions(driver);
+act.dragAndDrop(source, target).build().perform();
+
+actions.dragAndDropBy(sourceElement, 100, 50).build().perform();
 
 JavascriptExecutor js=(JavascriptExecutor) driver;
     WebElement element=driver.findElement(By.xpath("//img[@alt='Download BikeDekho’s Free iOS App']"));
