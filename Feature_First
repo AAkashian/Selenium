@@ -1,0 +1,164 @@
+PAGES
+package pages;
+
+import org.junit.Assert;
+import org.openqa.selenium.WebDriver;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import stepdefinations.ReportMaker;
+import uiStore.SearchPageUi;
+import utils.LoggerHandler;
+import utils.Screenshot;
+import utils.WebDriverHelper;
+
+public class SearchPage {
+   WebDriver driver;
+   WebDriverHelper helper;
+   ExtentTest test;
+   public SearchPage(WebDriver driver){
+     this.driver=driver;
+     helper=new WebDriverHelper(driver);
+     test=ReportMaker.reports.createTest("search");
+   }
+
+   public void searchString(String searchString){
+    helper.waitForElementToBeVisible(SearchPageUi.input, 10);
+    helper.sendKeys(SearchPageUi.input, searchString);
+    test.log(Status.PASS, "report created");
+   }
+
+   public void clickSearchIcon(){
+     helper.clickOnElement(SearchPageUi.search);
+   }
+
+   public void verifyTitleWashingMachine(){
+     String actualTile=helper.getText(SearchPageUi.title);
+     LoggerHandler.info("Sent the value Search String");
+     System.out.println(actualTile);
+     Assert.assertTrue(actualTile.contains("Washing Machine"));
+   }
+
+   public void verifyTitleDellDesktop(){
+    String actualTile=helper.getText(SearchPageUi.title2);
+    System.out.println(actualTile);
+    Assert.assertTrue(actualTile.contains("Dell DeskTop Computer"));
+    Screenshot.captureScreenShot("Screenshots");
+  }
+
+}
+
+
+//RUNNER
+package runner;
+
+import org.junit.runner.RunWith;
+
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(features = "features",glue = {"stepdefinations"})
+public class TestRunner {
+    
+}
+
+//STEP_DEFINATION
+package stepdefinations;
+
+import java.io.IOException;
+
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+import utils.Base;
+public class Background extends Base{
+
+@Given("I open the Url")
+public void i_open_the_url() throws IOException {
+   openBrowser();
+}
+
+ @After
+ public void tearDown(){
+   driver.quit();
+ }
+}
+
+package stepdefinations;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import io.cucumber.java.AfterAll;
+import io.cucumber.java.BeforeAll;
+import utils.Reporter;
+
+public class ReportMaker {
+   public static ExtentReports reports;
+   static  ExtentTest test;
+
+     @BeforeAll
+     public static void setUpReports(){
+        reports=Reporter.generateExtentReport("Kmart Report");
+     }
+     @AfterAll
+     public static void tearDown(){
+      reports.flush();    
+    }
+}
+
+package stepdefinations;
+
+import org.junit.Assert;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pages.SearchPage;
+import utils.Base;
+import utils.LoggerHandler;
+
+public class SearchStep extends Base{
+
+@When("I search {string} in search bar")
+public void i_search_in_search_bar(String searchString) {
+    LoggerHandler.info("Sucessfully Search the String");
+    SearchPage searchPage=new SearchPage(driver);
+    searchPage.searchString(searchString);
+}
+
+@When("I click search Icon")
+public void i_click_search_icon() throws InterruptedException {
+SearchPage searchPage=new SearchPage(driver);
+  searchPage.clickSearchIcon(); 
+ // Thread.sleep(3000); 
+}
+@Then("I validate page title for Washing machine")
+public void i_validate_page_title_for_washing_machine() {
+    SearchPage searchPage=new SearchPage(driver);
+    searchPage.verifyTitleWashingMachine();
+}
+@When("I search {string} in search bar for second time")
+public void i_search_in_search_bar_for_second_time(String str) {
+    SearchPage searchPage=new SearchPage(driver);
+    searchPage.searchString(str);
+}
+@When("I click Search Icon for second time")
+public void i_click_search_icon_for_second_time() {
+    
+}
+@Then("I validate page title for Dell Desktop Computer")
+public void i_validate_page_title_for_dell_desktop_computer() {
+   
+}
+}
+
+//UI
+package uiStore;
+
+import org.openqa.selenium.By;
+
+public class SearchPageUi {
+   public static By input=By.xpath("//input[@id='app_search_input_mobile']"); 
+   public static By search=By.xpath("(//i[@class='ti-search searchicon'])[1]"); 
+   public static By title=By.xpath("//span[@class='results-for-keyword ng-star-inserted']"); 
+   public static By title2=By.xpath("//span[@class='results-for-keyword ng-star-inserted']"); 
+  
+}
+
