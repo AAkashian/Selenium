@@ -1,3 +1,9 @@
+1.Creating feature File(language-garkin)
+2.Creating Test Runner
+AND run the testrunner
+3.we will get step defination
+ copy paste from terminal
+
 Feature: Search in Google
 
 Background: launch the webpage
