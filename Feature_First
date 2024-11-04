@@ -1,3 +1,18 @@
+//Feature To write
+Feature: Search in Kmart
+Background: Open the url
+Given I open the Url
+
+Scenario: Searching Products in Kmart
+When  I search "Washing Machine" in search bar
+And I click search Icon
+Then I validate page title for Washing machine
+
+When I search "Dell Desktop Computer" in search bar for second time
+And I click Search Icon for second time
+Then I validate page title for Dell Desktop Computer
+   
+
 PAGES
 package pages;
 
