@@ -1,0 +1,18 @@
+Feature: Search in Google
+
+Background: launch the webpage
+Given I open the Url
+
+Scenario Outline: Search in Google.com
+When I enter <SearchString> in search Background 
+And I hit enter
+And I click on the first Link
+And I enter <search2>
+Then I validate the search ResultPage
+And I validate the search ResultPage title
+
+Examples:
+    | SearchString |      search2 |
+    | Selenium Cucumber  |  Cucumber  |
+    | Selenium Java  |   Java  |
+    | Selenium testng  |  testng  |
