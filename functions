@@ -1,3 +1,8 @@
+//TO ADD SCREENSHOT IN REPORT
+String path=Reporter.creteSS("name");
+reports.addScreenCapture(path,""message);
+
+
 JavascriptExecutor js = (JavascriptExecutor) driver;
 js.executeScript("window.scrollBy(0,1000)");
 
